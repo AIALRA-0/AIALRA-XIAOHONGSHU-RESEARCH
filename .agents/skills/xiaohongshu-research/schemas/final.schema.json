@@ -57,7 +57,7 @@
     },
     "round_coverage": {"type": "object"},
     "inspection_coverage": {"type": "object"},
-    "manual_search_urls": {"type": "array", "minItems": 3, "maxItems": 8, "items": {"type": "string"}},
+    "manual_search_urls": {"type": "array", "minItems": 3, "maxItems": 5, "items": {"type": "string"}},
     "warnings": {"type": "array", "maxItems": 30, "items": {"type": "string"}}
   }
 }

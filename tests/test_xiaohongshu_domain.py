@@ -56,7 +56,7 @@ def sample_plan() -> dict:
             ],
             "sort_modes": ["comprehensive", "latest"],
             "minimum_rounds": 3,
-            "maximum_rounds": 6,
+            "maximum_rounds": 5,
             "candidate_limit": 80,
             "detail_limit": 6,
             "comments_per_note": 10,
@@ -65,8 +65,10 @@ def sample_plan() -> dict:
                 "consecutive_rounds": 2,
             },
             "pacing": {
-                "maximum_parallel_pages": 2,
-                "minimum_action_interval_seconds": 1.5,
+                "maximum_parallel_pages": 1,
+                "minimum_action_interval_seconds": 3,
+                "risk_event_retries": 0,
+                "reuse_observation_cache_seconds": 900,
             },
         },
         "assumptions": ["只研究公开笔记"],
@@ -305,6 +307,14 @@ class XiaohongshuDomainTests(unittest.TestCase):
         for routing in (search_routing, detail_routing):
             self.assertIn("account-write", routing["opencli"]["prohibited_operation_classes"])
             self.assertIn("credential-read", routing["opencli"]["prohibited_operation_classes"])
+        for node_id in ("collect-search-rounds", "inspect-notes"):
+            node = nodes[node_id]
+            arguments = node["action"]["arguments"]
+            self.assertEqual(1, arguments["maximum_parallel_pages"])
+            self.assertGreaterEqual(arguments["minimum_action_interval_seconds"], 3)
+            self.assertEqual(0, arguments["risk_event_retries"])
+            self.assertGreaterEqual(arguments["reuse_observation_cache_seconds"], 900)
+            self.assertEqual(0, node["max_retries"])
         routing_text = (SKILL / "references" / "backend-routing.md").read_text(encoding="utf-8")
         self.assertIn("没有明确许可证的项目只能学习公开思路", routing_text)
         self.assertIn("本仓库不自动安装 OpenCLI", routing_text)

@@ -19,8 +19,8 @@ def validate(source: dict[str, Any], plan: dict[str, Any]) -> list[str]:
     collection = require_object(plan.get("collection"), "plan.collection")
     queries = require_list(collection.get("query_variants"), "query_variants")
     normalized = [normalized_text(query) for query in queries]
-    if len(queries) < 3 or len(queries) > 8:
-        errors.append("query_variants must contain three to eight queries")
+    if len(queries) < 3 or len(queries) > 5:
+        errors.append("query_variants must contain three to five queries")
     if any(not query for query in normalized) or len(set(normalized)) != len(normalized):
         errors.append("query_variants must be non-empty and distinct after normalization")
     topic = require_object(plan.get("topic"), "plan.topic")
@@ -31,16 +31,21 @@ def validate(source: dict[str, Any], plan: dict[str, Any]) -> list[str]:
         errors.append("at least one query must contain a required concept")
     minimum = collection.get("minimum_rounds")
     maximum = collection.get("maximum_rounds")
-    if not isinstance(minimum, int) or not isinstance(maximum, int) or not 3 <= minimum <= maximum <= 8:
-        errors.append("round limits must satisfy 3 <= minimum <= maximum <= 8")
+    if not isinstance(minimum, int) or not isinstance(maximum, int) or not 3 <= minimum <= maximum <= 5:
+        errors.append("round limits must satisfy 3 <= minimum <= maximum <= 5")
     if collection.get("candidate_limit", 0) < collection.get("detail_limit", 0):
         errors.append("candidate_limit must be at least detail_limit")
     pacing = require_object(collection.get("pacing"), "pacing")
-    if pacing.get("maximum_parallel_pages") not in {1, 2}:
-        errors.append("maximum_parallel_pages must be one or two")
+    if pacing.get("maximum_parallel_pages") != 1:
+        errors.append("maximum_parallel_pages must be one")
     interval = pacing.get("minimum_action_interval_seconds")
-    if not isinstance(interval, (int, float)) or interval < 1.5:
-        errors.append("minimum_action_interval_seconds must be at least 1.5")
+    if not isinstance(interval, (int, float)) or interval < 3:
+        errors.append("minimum_action_interval_seconds must be at least 3")
+    if pacing.get("risk_event_retries") != 0:
+        errors.append("risk_event_retries must be zero")
+    cache_seconds = pacing.get("reuse_observation_cache_seconds")
+    if not isinstance(cache_seconds, int) or not 900 <= cache_seconds <= 3600:
+        errors.append("reuse_observation_cache_seconds must be 900-3600")
     if collection.get("saturation", {}).get("consecutive_rounds") != 2:
         errors.append("saturation requires exactly two consecutive rounds")
     return errors

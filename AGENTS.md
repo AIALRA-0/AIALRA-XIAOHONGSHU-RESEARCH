@@ -57,6 +57,10 @@ python3 .agents/skills/xiaohongshu-research/scripts/freeze_core.py --check
 - 结构化外部操作直接使用 MCP
 - 网页结构可靠时使用浏览器 DOM
 - 缺少结构化操作时才使用 Computer Use
+- `policy-blocked` 是硬停止，不能进入回退、重试或更换执行面
+- 搜索和详情使用单页面串行读取，相邻自动动作至少间隔三秒
+- 同一次运行优先复用十五分钟内已经取得的查询、笔记和评论证据
+- 登录、人机检查、限流和宿主策略阻止出现后不自动重试
 - 只有无法机械判断的任务才使用模型推理
 
 ## 文档可读性

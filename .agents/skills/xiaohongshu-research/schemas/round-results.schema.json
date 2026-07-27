@@ -16,13 +16,13 @@
     "rounds": {
       "type": "array",
       "minItems": 3,
-      "maxItems": 8,
+      "maxItems": 5,
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": ["round_id", "query", "sort_mode", "source_backend", "retrieved_at", "result_count"],
         "properties": {
-          "round_id": {"type": "string", "pattern": "^round-[1-8]$"},
+          "round_id": {"type": "string", "pattern": "^round-[1-5]$"},
           "query": {"type": "string", "minLength": 2, "maxLength": 180},
           "sort_mode": {"enum": ["comprehensive", "latest", "most-liked", "most-saved", "most-comments"]},
           "source_backend": {"enum": ["opencli", "supported-chrome"]},
@@ -42,7 +42,7 @@
         "properties": {
           "candidate_id": {"type": "string", "minLength": 1, "maxLength": 120},
           "note_id": {"type": "string", "pattern": "^[a-zA-Z0-9_-]{12,40}$"},
-          "round_id": {"type": "string", "pattern": "^round-[1-8]$"},
+          "round_id": {"type": "string", "pattern": "^round-[1-5]$"},
           "query": {"type": "string", "minLength": 2, "maxLength": 180},
           "sort_mode": {"enum": ["comprehensive", "latest", "most-liked", "most-saved", "most-comments"]},
           "source_backend": {"enum": ["opencli", "supported-chrome"]},
