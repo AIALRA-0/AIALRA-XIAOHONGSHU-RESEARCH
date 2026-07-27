@@ -52,18 +52,36 @@
           "id": "collect-search-rounds",
           "input_schema": "schemas/research-plan.schema.json",
           "output_schema": "schemas/round-results.schema.json",
-          "executor": "browser-dom",
+          "executor": "mcp",
           "action": {
             "name": "xiaohongshu.collect-multi-round-search",
             "arguments": {
               "input_source": "node-input",
               "source_routing": {
                 "provider_order": [
-                  "opencli",
-                  "supported-chrome"
+                  "aialra-shopping-browser",
+                  "opencli"
                 ],
+                "aialra_shopping_browser": {
+                  "mode": "preferred-when-installed-and-loaded",
+                  "mcp_server": "aialra-shopping-browser",
+                  "skill": "shopping-browser-research",
+                  "required_observation_schema": "schemas/observation.schema.json",
+                  "allowed_operation_classes": [
+                    "navigation-read",
+                    "search-read",
+                    "snapshot-read",
+                    "detail-read",
+                    "screenshot-read"
+                  ],
+                  "prohibited_operation_classes": [
+                    "account-write",
+                    "credential-read",
+                    "content-write"
+                  ]
+                },
                 "opencli": {
-                  "mode": "use-only-when-installed-connected-and-trusted",
+                  "mode": "fallback-only-before-first-site-access-when-installed-connected-and-trusted",
                   "allowed_operations": [
                     "xiaohongshu.search"
                   ],
@@ -72,10 +90,6 @@
                     "credential-read",
                     "content-write"
                   ]
-                },
-                "supported_chrome": {
-                  "mode": "fallback",
-                  "reuse_current_login_session": true
                 }
               },
               "allowed_hosts": [
@@ -94,7 +108,7 @@
                 "stealth-browser"
               ]
             },
-            "instructions": "Use OpenCLI only when it is already installed, connected and trusted, and call only xiaohongshu.search; otherwise use the supported Chrome connector with the current logged-in session; execute planned rounds sequentially in one page; wait at least three seconds between automatic actions; reuse current-run observations instead of repeating a query; record source_backend on every round and candidate together with round, query, sort, rank, stable note ID, title, author, visible date, visible engagement, cover, direct URL and retrieval time; stop early only after the declared saturation rule; never publish or interact with content"
+            "instructions": "Use the loaded aialra-shopping-browser MCP as the preferred backend and validate each external observation with its common observation schema before mapping it to this node schema; only when that MCP is unavailable before the first Xiaohongshu access may an already installed connected and trusted OpenCLI be selected, with xiaohongshu.search as its only action; execute planned rounds sequentially in one page; wait at least three seconds between automatic actions; reuse current-run observations instead of repeating a query; record source_backend on every round and candidate together with round, query, sort, rank, stable note ID, title, author, visible date, visible engagement, cover, direct URL and retrieval time; stop early only after the declared saturation rule; never publish or interact with content"
           },
           "side_effect": "read",
           "requires_confirmation": false,
@@ -145,18 +159,36 @@
           "id": "inspect-notes",
           "input_schema": "schemas/shortlist.schema.json",
           "output_schema": "schemas/inspection.schema.json",
-          "executor": "browser-dom",
+          "executor": "mcp",
           "action": {
             "name": "xiaohongshu.inspect-note-batch",
             "arguments": {
               "input_source": "node-input",
               "source_routing": {
                 "provider_order": [
-                  "opencli",
-                  "supported-chrome"
+                  "aialra-shopping-browser",
+                  "opencli"
                 ],
+                "aialra_shopping_browser": {
+                  "mode": "preferred-when-installed-and-loaded",
+                  "mcp_server": "aialra-shopping-browser",
+                  "skill": "shopping-browser-research",
+                  "required_observation_schema": "schemas/observation.schema.json",
+                  "allowed_operation_classes": [
+                    "navigation-read",
+                    "snapshot-read",
+                    "detail-read",
+                    "comment-read",
+                    "screenshot-read"
+                  ],
+                  "prohibited_operation_classes": [
+                    "account-write",
+                    "credential-read",
+                    "content-write"
+                  ]
+                },
                 "opencli": {
-                  "mode": "use-only-when-installed-connected-and-trusted",
+                  "mode": "fallback-only-before-first-site-access-when-installed-connected-and-trusted",
                   "allowed_operations": [
                     "xiaohongshu.note",
                     "xiaohongshu.comments"
@@ -166,10 +198,6 @@
                     "credential-read",
                     "content-write"
                   ]
-                },
-                "supported_chrome": {
-                  "mode": "fallback",
-                  "reuse_current_login_session": true
                 }
               },
               "allowed_hosts": [
@@ -184,7 +212,7 @@
               "maximum_comments_per_note": 12,
               "maximum_images_per_note": 12
             },
-            "instructions": "Use OpenCLI only when it is already installed, connected and trusted, and call only xiaohongshu.note and xiaohongshu.comments; otherwise use the supported Chrome connector; open shortlisted notes sequentially in the same page; wait at least three seconds between automatic actions; reuse current-run note observations; preserve search_backends from the shortlist and record detail_backend; capture direct URL, title, author, publication time, text, image URLs, visible engagement and public comments; extract atomic claims with short direct evidence; classify comments as support, contradiction or other; record commercial signals, caveats and per-note failures; do not like, save, follow, comment, message or publish"
+            "instructions": "Reuse the backend selected before the first Xiaohongshu access; for aialra-shopping-browser validate each external observation with its common observation schema before mapping it to this node schema; for OpenCLI call only xiaohongshu.note and xiaohongshu.comments; open shortlisted notes sequentially in the same page; wait at least three seconds between automatic actions; reuse current-run note observations; preserve search_backends from the shortlist and record detail_backend; capture direct URL, title, author, publication time, text, image URLs, visible engagement and public comments; extract atomic claims with short direct evidence; classify comments as support, contradiction or other; record commercial signals, caveats and per-note failures; do not like, save, follow, comment, message or publish"
           },
           "side_effect": "read",
           "requires_confirmation": false,

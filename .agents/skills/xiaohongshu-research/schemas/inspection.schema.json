@@ -32,8 +32,8 @@
           "published_at": {"type": "string", "minLength": 1, "maxLength": 120},
           "content_summary": {"type": "string", "minLength": 1, "maxLength": 2000},
           "image_urls": {"type": "array", "maxItems": 12, "items": {"type": "string", "minLength": 1, "maxLength": 3000}},
-          "search_backends": {"type": "array", "minItems": 1, "maxItems": 2, "uniqueItems": true, "items": {"enum": ["opencli", "supported-chrome"]}},
-          "detail_backend": {"enum": ["opencli", "supported-chrome"]},
+          "search_backends": {"type": "array", "minItems": 1, "maxItems": 2, "uniqueItems": true, "items": {"enum": ["aialra-shopping-browser", "opencli"]}},
+          "detail_backend": {"enum": ["aialra-shopping-browser", "opencli"]},
           "metrics": {
             "type": "object",
             "additionalProperties": false,

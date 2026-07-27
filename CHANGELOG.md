@@ -4,6 +4,25 @@
 
 每次发布时填写日期，并按新增、修改、修复、弃用、安全或破坏性变化分类
 
+## [0.5.0] - 2026-07-27
+
+### 新增
+
+- 接入 `AIALRA Shopping Browser` 本地持久 Chrome MCP
+- 搜索、笔记、评论和最终来源记录 `aialra-shopping-browser` 实际后端
+- 增加通用观察证据与平台 Schema 的双层校验说明
+
+### 修改
+
+- 后端顺序改为 `AIALRA Shopping Browser → 已安装且受信任的 OpenCLI`
+- 移除内置 Codex Chrome 默认回退
+- 外部采集节点明确使用 MCP 执行器
+
+### 安全
+
+- 登录资料只保存在独立本地 Chrome 资料中，不导出 Cookie 或存储状态
+- `policy-blocked` 以后禁止切换到其他执行面
+
 ## [0.4.0] - 2026-07-26
 
 ### 稳定性

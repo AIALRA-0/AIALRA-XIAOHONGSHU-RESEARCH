@@ -92,7 +92,7 @@ def candidate(
         "round_id": round_id,
         "query": query,
         "sort_mode": sort_mode,
-        "source_backend": "supported-chrome",
+        "source_backend": "aialra-shopping-browser",
         "result_rank": rank,
         "title": title,
         "author": f"作者{candidate_id}",
@@ -114,9 +114,9 @@ def sample_round_results() -> dict:
     note_c = "67abcde0123456789abcde03"
     note_bad = "67abcde0123456789abcde04"
     rounds = [
-        {"round_id": "round-1", "query": queries[0], "sort_mode": "comprehensive", "source_backend": "supported-chrome", "retrieved_at": now_iso(), "result_count": 3},
-        {"round_id": "round-2", "query": queries[1], "sort_mode": "comprehensive", "source_backend": "supported-chrome", "retrieved_at": now_iso(), "result_count": 2},
-        {"round_id": "round-3", "query": queries[2], "sort_mode": "latest", "source_backend": "supported-chrome", "retrieved_at": now_iso(), "result_count": 2},
+        {"round_id": "round-1", "query": queries[0], "sort_mode": "comprehensive", "source_backend": "aialra-shopping-browser", "retrieved_at": now_iso(), "result_count": 3},
+        {"round_id": "round-2", "query": queries[1], "sort_mode": "comprehensive", "source_backend": "aialra-shopping-browser", "retrieved_at": now_iso(), "result_count": 2},
+        {"round_id": "round-3", "query": queries[2], "sort_mode": "latest", "source_backend": "aialra-shopping-browser", "retrieved_at": now_iso(), "result_count": 2},
     ]
     cards = [
         candidate("c1", note_a, "round-1", queries[0], "2026 东京展览完整攻略", 1, likes="1.2万"),
@@ -145,7 +145,7 @@ def inspected_note(source: dict, claim_id: str, statement: str) -> dict:
         "content_summary": statement,
         "image_urls": [source["cover_url"]],
         "search_backends": source["source_backends"],
-        "detail_backend": "supported-chrome",
+        "detail_backend": "aialra-shopping-browser",
         "metrics": {
             "likes": source["likes_text"],
             "saves": source["saves_text"],
@@ -193,8 +193,8 @@ class XiaohongshuDomainTests(unittest.TestCase):
         self.assertNotIn("67abcde0123456789abcde04", note_ids)
         first = next(item for item in result["shortlist"] if item["note_id"] == "67abcde0123456789abcde01")
         self.assertEqual(["round-1", "round-2", "round-3"], first["seen_in_rounds"])
-        self.assertEqual(["supported-chrome"], first["source_backends"])
-        self.assertEqual(["supported-chrome"], result["round_coverage"]["source_backends"])
+        self.assertEqual(["aialra-shopping-browser"], first["source_backends"])
+        self.assertEqual(["aialra-shopping-browser"], result["round_coverage"]["source_backends"])
 
     def test_mixed_backend_provenance_is_preserved(self) -> None:
         payload = sample_round_results()
@@ -209,9 +209,9 @@ class XiaohongshuDomainTests(unittest.TestCase):
             for item in result["shortlist"]
             if item["note_id"] == "67abcde0123456789abcde01"
         )
-        self.assertEqual(["supported-chrome", "opencli"], repeated["source_backends"])
+        self.assertEqual(["aialra-shopping-browser", "opencli"], repeated["source_backends"])
         self.assertEqual(
-            ["supported-chrome", "opencli"],
+            ["aialra-shopping-browser", "opencli"],
             result["round_coverage"]["source_backends"],
         )
 
@@ -275,8 +275,8 @@ class XiaohongshuDomainTests(unittest.TestCase):
             "warnings": [],
         }
         self.assertEqual([], validate_final(inspection, final))
-        self.assertEqual(["supported-chrome"], final["sources"][0]["search_backends"])
-        self.assertEqual("supported-chrome", final["sources"][0]["detail_backend"])
+        self.assertEqual(["aialra-shopping-browser"], final["sources"][0]["search_backends"])
+        self.assertEqual("aialra-shopping-browser", final["sources"][0]["detail_backend"])
         final["findings"][0]["confidence"] = "high"
         self.assertTrue(validate_final(inspection, final))
         final["findings"][0]["confidence"] = "medium"
@@ -298,7 +298,10 @@ class XiaohongshuDomainTests(unittest.TestCase):
         nodes = {node["id"]: node for node in workflow["execution"]["graph"]["nodes"]}
         search_routing = nodes["collect-search-rounds"]["action"]["arguments"]["source_routing"]
         detail_routing = nodes["inspect-notes"]["action"]["arguments"]["source_routing"]
-        self.assertEqual(["opencli", "supported-chrome"], search_routing["provider_order"])
+        self.assertEqual(
+            ["aialra-shopping-browser", "opencli"],
+            search_routing["provider_order"],
+        )
         self.assertEqual(["xiaohongshu.search"], search_routing["opencli"]["allowed_operations"])
         self.assertEqual(
             ["xiaohongshu.note", "xiaohongshu.comments"],
