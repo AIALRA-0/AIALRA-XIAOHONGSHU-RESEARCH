@@ -92,7 +92,7 @@
                 "stealth-browser"
               ]
             },
-            "instructions": "Use OpenCLI only when it is already installed, connected and trusted, and call only xiaohongshu.search; otherwise use the supported Chrome connector with the current logged-in session; execute at least three planned rounds across distinct queries or supported sort modes; record round, query, sort, rank, stable note ID, title, author, visible date, visible engagement, cover, direct URL and retrieval time; stop early only after the declared saturation rule; never publish or interact with content"
+            "instructions": "Use OpenCLI only when it is already installed, connected and trusted, and call only xiaohongshu.search; otherwise use the supported Chrome connector with the current logged-in session; execute at least three planned rounds across distinct queries or supported sort modes; record source_backend on every round and candidate together with round, query, sort, rank, stable note ID, title, author, visible date, visible engagement, cover, direct URL and retrieval time; stop early only after the declared saturation rule; never publish or interact with content"
           },
           "side_effect": "read",
           "requires_confirmation": false,
@@ -180,7 +180,7 @@
               "maximum_comments_per_note": 30,
               "maximum_images_per_note": 12
             },
-            "instructions": "Use OpenCLI only when it is already installed, connected and trusted, and call only xiaohongshu.note and xiaohongshu.comments; otherwise use the supported Chrome connector; open every shortlisted note within budget; capture direct URL, title, author, publication time, text, image URLs, visible engagement and public comments; extract atomic claims with short direct evidence; classify comments as support, contradiction or other; record commercial signals, caveats and per-note failures; do not like, save, follow, comment, message or publish"
+            "instructions": "Use OpenCLI only when it is already installed, connected and trusted, and call only xiaohongshu.note and xiaohongshu.comments; otherwise use the supported Chrome connector; open every shortlisted note within budget; preserve search_backends from the shortlist and record detail_backend; capture direct URL, title, author, publication time, text, image URLs, visible engagement and public comments; extract atomic claims with short direct evidence; classify comments as support, contradiction or other; record commercial signals, caveats and per-note failures; do not like, save, follow, comment, message or publish"
           },
           "side_effect": "read",
           "requires_confirmation": false,
@@ -216,7 +216,7 @@
               "require_source_ids": true,
               "preserve_disagreement": true
             },
-            "instructions": "Answer the research question using only inspected notes; group equivalent claims without merging distinct conditions; distinguish consensus, disagreement and evidence gaps; lower confidence for stale, single-source or commercial evidence; every finding must reference source note IDs from the input; include direct source links and retrieval times"
+            "instructions": "Answer the research question using only inspected notes; group equivalent claims without merging distinct conditions; distinguish consensus, disagreement and evidence gaps; lower confidence for stale, single-source or commercial evidence; every finding must reference source note IDs from the input; preserve search_backends and detail_backend on every final source; include direct source links and retrieval times"
           },
           "side_effect": "none",
           "requires_confirmation": false,

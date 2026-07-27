@@ -68,6 +68,12 @@ OpenCLI 已经实现小红书搜索、笔记和评论适配器，并输出结构
 
 笔记核验也必须返回相同的 `inspection` 结构
 
+每轮和每条搜索记录使用 `source_backend` 保存实际后端
+
+合并后的候选使用 `source_backends` 保存全部搜索来源
+
+详情结果使用 `search_backends` 保留搜索来源，并用 `detail_backend` 保存详情来源
+
 后端不能自行宣布共识、跳过来源追溯或改变置信度规则
 
 后端返回缺少字段、类型错误、临时令牌或无法确定来源时，validator 会拒绝结果

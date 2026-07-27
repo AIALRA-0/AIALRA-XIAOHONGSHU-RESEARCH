@@ -90,6 +90,7 @@ def candidate(
         "round_id": round_id,
         "query": query,
         "sort_mode": sort_mode,
+        "source_backend": "supported-chrome",
         "result_rank": rank,
         "title": title,
         "author": f"作者{candidate_id}",
@@ -111,9 +112,9 @@ def sample_round_results() -> dict:
     note_c = "67abcde0123456789abcde03"
     note_bad = "67abcde0123456789abcde04"
     rounds = [
-        {"round_id": "round-1", "query": queries[0], "sort_mode": "comprehensive", "retrieved_at": now_iso(), "result_count": 3},
-        {"round_id": "round-2", "query": queries[1], "sort_mode": "comprehensive", "retrieved_at": now_iso(), "result_count": 2},
-        {"round_id": "round-3", "query": queries[2], "sort_mode": "latest", "retrieved_at": now_iso(), "result_count": 2},
+        {"round_id": "round-1", "query": queries[0], "sort_mode": "comprehensive", "source_backend": "supported-chrome", "retrieved_at": now_iso(), "result_count": 3},
+        {"round_id": "round-2", "query": queries[1], "sort_mode": "comprehensive", "source_backend": "supported-chrome", "retrieved_at": now_iso(), "result_count": 2},
+        {"round_id": "round-3", "query": queries[2], "sort_mode": "latest", "source_backend": "supported-chrome", "retrieved_at": now_iso(), "result_count": 2},
     ]
     cards = [
         candidate("c1", note_a, "round-1", queries[0], "2026 东京展览完整攻略", 1, likes="1.2万"),
@@ -141,6 +142,8 @@ def inspected_note(source: dict, claim_id: str, statement: str) -> dict:
         "published_at": source["published_text"],
         "content_summary": statement,
         "image_urls": [source["cover_url"]],
+        "search_backends": source["source_backends"],
+        "detail_backend": "supported-chrome",
         "metrics": {
             "likes": source["likes_text"],
             "saves": source["saves_text"],
@@ -188,6 +191,27 @@ class XiaohongshuDomainTests(unittest.TestCase):
         self.assertNotIn("67abcde0123456789abcde04", note_ids)
         first = next(item for item in result["shortlist"] if item["note_id"] == "67abcde0123456789abcde01")
         self.assertEqual(["round-1", "round-2", "round-3"], first["seen_in_rounds"])
+        self.assertEqual(["supported-chrome"], first["source_backends"])
+        self.assertEqual(["supported-chrome"], result["round_coverage"]["source_backends"])
+
+    def test_mixed_backend_provenance_is_preserved(self) -> None:
+        payload = sample_round_results()
+        payload["rounds"][1]["source_backend"] = "opencli"
+        for item in payload["candidates"]:
+            if item["round_id"] == "round-2":
+                item["source_backend"] = "opencli"
+        self.assertEqual([], validate_round_results(payload["plan"], payload))
+        result = build_shortlist(payload)
+        repeated = next(
+            item
+            for item in result["shortlist"]
+            if item["note_id"] == "67abcde0123456789abcde01"
+        )
+        self.assertEqual(["supported-chrome", "opencli"], repeated["source_backends"])
+        self.assertEqual(
+            ["supported-chrome", "opencli"],
+            result["round_coverage"]["source_backends"],
+        )
 
     def test_inspection_and_final_require_traceable_source_ids(self) -> None:
         shortlist = build_shortlist(sample_round_results())
@@ -214,6 +238,8 @@ class XiaohongshuDomainTests(unittest.TestCase):
                 "author": note["author"],
                 "url": note["url"],
                 "published_at": note["published_at"],
+                "search_backends": note["search_backends"],
+                "detail_backend": note["detail_backend"],
                 "evidence_level": note["evidence_level"],
                 "commercial_signals": note["commercial_signals"],
                 "retrieved_at": note["retrieved_at"],
@@ -247,6 +273,8 @@ class XiaohongshuDomainTests(unittest.TestCase):
             "warnings": [],
         }
         self.assertEqual([], validate_final(inspection, final))
+        self.assertEqual(["supported-chrome"], final["sources"][0]["search_backends"])
+        self.assertEqual("supported-chrome", final["sources"][0]["detail_backend"])
         final["findings"][0]["confidence"] = "high"
         self.assertTrue(validate_final(inspection, final))
         final["findings"][0]["confidence"] = "medium"
@@ -373,6 +401,8 @@ class XiaohongshuRunnerEndToEndTests(unittest.TestCase):
                     "author": note["author"],
                     "url": note["url"],
                     "published_at": note["published_at"],
+                    "search_backends": note["search_backends"],
+                    "detail_backend": note["detail_backend"],
                     "evidence_level": note["evidence_level"],
                     "commercial_signals": note["commercial_signals"],
                     "retrieved_at": note["retrieved_at"],

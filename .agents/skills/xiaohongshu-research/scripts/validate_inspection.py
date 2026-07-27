@@ -36,6 +36,8 @@ def validate(shortlist: dict[str, Any], inspection: dict[str, Any]) -> list[str]
             errors.append(f"inspection URL does not match shortlist: {note_id}")
         if note.get("seen_in_rounds") != source["seen_in_rounds"] or note.get("rank_history") != source["rank_history"]:
             errors.append(f"inspection changed round evidence: {note_id}")
+        if note.get("search_backends") != source["source_backends"]:
+            errors.append(f"inspection changed search backends: {note_id}")
         if not time_is_fresh(note.get("retrieved_at")):
             errors.append(f"inspection time is missing, invalid, or stale: {note_id}")
         claim_ids = [claim.get("claim_id") for claim in note.get("claims", [])]

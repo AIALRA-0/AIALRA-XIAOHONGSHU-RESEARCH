@@ -29,6 +29,8 @@ def validate(source: dict[str, Any], result: dict[str, Any]) -> list[str]:
                 item.get("url") != original.get("url")
                 or item.get("title") != original.get("title")
                 or item.get("author") != original.get("author")
+                or item.get("search_backends") != original.get("search_backends")
+                or item.get("detail_backend") != original.get("detail_backend")
                 or item.get("evidence_level") != original.get("evidence_level")
             ):
                 errors.append(f"final source changed inspected evidence: {item.get('note_id')}")

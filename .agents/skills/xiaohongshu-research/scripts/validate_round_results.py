@@ -62,6 +62,8 @@ def validate(plan: dict[str, Any], payload: dict[str, Any]) -> list[str]:
         observed_counts[round_id] += 1
         if candidate.get("query") != round_data.get("query") or candidate.get("sort_mode") != round_data.get("sort_mode"):
             errors.append(f"candidate round metadata mismatch: {candidate_id}")
+        if candidate.get("source_backend") != round_data.get("source_backend"):
+            errors.append(f"candidate source backend mismatch: {candidate_id}")
         note_id = candidate.get("note_id")
         if canonical_note_url(candidate.get("url"), note_id) is None or note_id_from_url(candidate.get("url")) != note_id:
             errors.append(f"candidate URL and note ID do not match: {candidate_id}")

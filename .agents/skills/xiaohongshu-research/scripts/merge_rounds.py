@@ -49,6 +49,7 @@ def build_shortlist(payload: dict[str, Any]) -> dict[str, Any]:
                     "comments_text": candidate["comments_text"],
                     "cover_url": candidate["cover_url"],
                     "url": url,
+                    "source_backends": [candidate["source_backend"]],
                     "seen_in_rounds": [round_id],
                     "matched_queries": [candidate["query"]],
                     "rank_history": [candidate["result_rank"]],
@@ -56,6 +57,8 @@ def build_shortlist(payload: dict[str, Any]) -> dict[str, Any]:
                     "last_seen_at": candidate["retrieved_at"],
                 }
             else:
+                if candidate["source_backend"] not in existing["source_backends"]:
+                    existing["source_backends"].append(candidate["source_backend"])
                 if round_id not in existing["seen_in_rounds"]:
                     existing["seen_in_rounds"].append(round_id)
                 if candidate["query"] not in existing["matched_queries"]:
@@ -108,6 +111,7 @@ def build_shortlist(payload: dict[str, Any]) -> dict[str, Any]:
             "unique_notes": len(unique),
             "new_unique_by_round": new_by_round,
             "duplicate_observations": len(candidates) - len(unique),
+            "source_backends": list(dict.fromkeys(round_data["source_backend"] for round_data in rounds)),
             "saturated": saturated,
             "stop_reason": payload["collection_status"]["stop_reason"],
             "blocked_reasons": payload["collection_status"]["blocked_reasons"],

@@ -10,6 +10,8 @@
 
 OpenCLI 不可用时使用 Codex 支持的 Chrome 能力，研究流程和质量标准保持不变
 
+每轮结果和每个详情都会记录实际采集后端，最终来源可以直接看到搜索来源与详情来源
+
 本 Skill 适用于旅游、购物、餐饮、住宿、教程、趋势、经验与风险等主题
 
 本 Skill 全程只读，不发布、不点赞、不收藏、不关注、不评论、不私信
@@ -136,6 +138,6 @@ python3 .agents/skills/xiaohongshu-research/scripts/freeze_core.py --check
 
 ## 当前版本
 
-当前版本为 `0.2.0`
+当前版本为 `0.3.0`
 
 版本变化见 [CHANGELOG.md](CHANGELOG.md)

@@ -20,11 +20,12 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["round_id", "query", "sort_mode", "retrieved_at", "result_count"],
+        "required": ["round_id", "query", "sort_mode", "source_backend", "retrieved_at", "result_count"],
         "properties": {
           "round_id": {"type": "string", "pattern": "^round-[1-8]$"},
           "query": {"type": "string", "minLength": 2, "maxLength": 180},
           "sort_mode": {"enum": ["comprehensive", "latest", "most-liked", "most-saved", "most-comments"]},
+          "source_backend": {"enum": ["opencli", "supported-chrome"]},
           "retrieved_at": {"type": "string", "minLength": 20, "maxLength": 50},
           "result_count": {"type": "integer", "minimum": 0, "maximum": 160}
         }
@@ -37,13 +38,14 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["candidate_id", "note_id", "round_id", "query", "sort_mode", "result_rank", "title", "author", "published_text", "likes_text", "saves_text", "comments_text", "cover_url", "url", "retrieved_at"],
+        "required": ["candidate_id", "note_id", "round_id", "query", "sort_mode", "source_backend", "result_rank", "title", "author", "published_text", "likes_text", "saves_text", "comments_text", "cover_url", "url", "retrieved_at"],
         "properties": {
           "candidate_id": {"type": "string", "minLength": 1, "maxLength": 120},
           "note_id": {"type": "string", "pattern": "^[a-zA-Z0-9_-]{12,40}$"},
           "round_id": {"type": "string", "pattern": "^round-[1-8]$"},
           "query": {"type": "string", "minLength": 2, "maxLength": 180},
           "sort_mode": {"enum": ["comprehensive", "latest", "most-liked", "most-saved", "most-comments"]},
+          "source_backend": {"enum": ["opencli", "supported-chrome"]},
           "result_rank": {"type": "integer", "minimum": 1, "maximum": 200},
           "title": {"type": "string", "minLength": 1, "maxLength": 500},
           "author": {"type": "string", "minLength": 1, "maxLength": 160},
