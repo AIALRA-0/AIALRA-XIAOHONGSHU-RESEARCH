@@ -24,18 +24,18 @@
     ".agents/skills/xiaohongshu-research/scripts/validate_plan.py": "5715d093bc6e6926241c90789a4993e430095efc4f3e6dfb1ee9372f848305af",
     ".agents/skills/xiaohongshu-research/scripts/validate_repo.py": "9ba8d60f624d47375876094ca3996817b943d22d8dde9c1dcf4a524ca86c7957",
     ".agents/skills/xiaohongshu-research/scripts/validate_round_results.py": "2f04034be36673753874412f8fa4b662440ac10c6415d1e0e7055107d8e02dfd",
-    ".agents/skills/xiaohongshu-research/workflow.yaml": "9b3c2c88933c8fabb5d3df697569ae6bf2d737b5125da57a27fbe7621b6e1264",
+    ".agents/skills/xiaohongshu-research/workflow.yaml": "f9ba062c4a0176a4aec3cba865d1ada095d07a1c8f428ad8d62565b878748c7b",
     ".github/workflows/validate.yml": "1c9f0dc43f226d7ae73eaf3bb96903ba0e605f0131c91bf9adca1ab164fb7d56",
     ".gitleaks.toml": "d2c27656257bc56cb262999fef033e13f3a54a8554a0f5a4e5e4703ecc668d08",
     ".pre-commit-config.yaml": "721f006af8f50751b68c7ac00cad81d44cf57cb7296403916eeb17a760f25643",
     "AGENTS.md": "d7072267741d3d72f6edd65349543d4f6c3981402f1adc6bc108491b8e96fc36",
     "SECURITY.md": "b05309f789fa52354ab9bbe37cbcef639df8044e4a917c2efbc61b3dedb6256d",
-    "VERSION": "a0ad50640139a524f86591157145bf1d4674ea9c065bfea21558f0f7b04430c8",
+    "VERSION": "aba951626c8690ce493cbc8f018205bb468003f61fbf00fd3d3c71cebabc0177",
     "scripts/check_secrets.py": "ac9d3ffc77761524984947c074495fd74120e4f9ecb657d4b37af145703808cc",
     "scripts/install_local.py": "e5ab3d37dcb6e1a4eef8bd28b848326fe4477735e3bb5c56c8e7f8775a946814",
     "scripts/validate.py": "bd6ff45c47651e415f25cd26db712f4da73606f4723e2ff8f8f58077d5f29f5e"
   },
   "format_version": 1,
   "skill_name": "xiaohongshu-research",
-  "skill_version": "0.5.0"
+  "skill_version": "0.5.1"
 }

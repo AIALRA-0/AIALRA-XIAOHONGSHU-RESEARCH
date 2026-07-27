@@ -302,14 +302,35 @@ class XiaohongshuDomainTests(unittest.TestCase):
             ["aialra-shopping-browser", "opencli"],
             search_routing["provider_order"],
         )
-        self.assertEqual(["xiaohongshu.search"], search_routing["opencli"]["allowed_operations"])
+        self.assertEqual(
+            ["xiaohongshu.search"],
+            search_routing["providers"]["opencli"]["allowed_operations"],
+        )
         self.assertEqual(
             ["xiaohongshu.note", "xiaohongshu.comments"],
-            detail_routing["opencli"]["allowed_operations"],
+            detail_routing["providers"]["opencli"]["allowed_operations"],
         )
         for routing in (search_routing, detail_routing):
-            self.assertIn("account-write", routing["opencli"]["prohibited_operation_classes"])
-            self.assertIn("credential-read", routing["opencli"]["prohibited_operation_classes"])
+            self.assertEqual(
+                {"provider_order", "providers", "selection_policy"},
+                set(routing),
+            )
+            self.assertIn(
+                "account-write",
+                routing["providers"]["opencli"]["prohibited_operation_classes"],
+            )
+            self.assertIn(
+                "credential-read",
+                routing["providers"]["opencli"]["prohibited_operation_classes"],
+            )
+            self.assertEqual(
+                "aialra-shopping-browser",
+                routing["providers"]["aialra-shopping-browser"]["identifier"],
+            )
+            self.assertIn(
+                "policy-blocked",
+                routing["selection_policy"]["hard_stop_kinds"],
+            )
         for node_id in ("collect-search-rounds", "inspect-notes"):
             node = nodes[node_id]
             arguments = node["action"]["arguments"]

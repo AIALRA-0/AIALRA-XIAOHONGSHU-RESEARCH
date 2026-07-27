@@ -62,33 +62,55 @@
                   "aialra-shopping-browser",
                   "opencli"
                 ],
-                "aialra_shopping_browser": {
-                  "mode": "preferred-when-installed-and-loaded",
-                  "mcp_server": "aialra-shopping-browser",
-                  "skill": "shopping-browser-research",
-                  "required_observation_schema": "schemas/observation.schema.json",
-                  "allowed_operation_classes": [
-                    "navigation-read",
-                    "search-read",
-                    "snapshot-read",
-                    "detail-read",
-                    "screenshot-read"
-                  ],
-                  "prohibited_operation_classes": [
-                    "account-write",
-                    "credential-read",
-                    "content-write"
-                  ]
+                "providers": {
+                  "aialra-shopping-browser": {
+                    "kind": "mcp",
+                    "identifier": "aialra-shopping-browser",
+                    "availability": "installed-and-loaded",
+                    "allowed_operations": [
+                      "browser_navigate",
+                      "browser_snapshot",
+                      "browser_click",
+                      "browser_type",
+                      "browser_wait_for",
+                      "browser_take_screenshot"
+                    ],
+                    "prohibited_operation_classes": [
+                      "account-write",
+                      "credential-read",
+                      "content-write"
+                    ],
+                    "evidence_contract": {
+                      "node_output_schema": "current-node-output",
+                      "observation_schema": "aialra-shopping-browser/observation-v1"
+                    }
+                  },
+                  "opencli": {
+                    "kind": "cli",
+                    "identifier": "OpenCLI",
+                    "availability": "installed-connected-and-trusted",
+                    "allowed_operations": [
+                      "xiaohongshu.search"
+                    ],
+                    "prohibited_operation_classes": [
+                      "account-write",
+                      "credential-read",
+                      "content-write"
+                    ],
+                    "evidence_contract": {
+                      "node_output_schema": "current-node-output",
+                      "observation_schema": null
+                    }
+                  }
                 },
-                "opencli": {
-                  "mode": "fallback-only-before-first-site-access-when-installed-connected-and-trusted",
-                  "allowed_operations": [
-                    "xiaohongshu.search"
-                  ],
-                  "prohibited_operation_classes": [
-                    "account-write",
-                    "credential-read",
-                    "content-write"
+                "selection_policy": {
+                  "select_before_first_access": true,
+                  "reuse_selected_after_success": true,
+                  "switch_only_when_unavailable_before_access": true,
+                  "hard_stop_kinds": [
+                    "user-required",
+                    "policy-blocked",
+                    "fatal"
                   ]
                 }
               },
@@ -169,34 +191,55 @@
                   "aialra-shopping-browser",
                   "opencli"
                 ],
-                "aialra_shopping_browser": {
-                  "mode": "preferred-when-installed-and-loaded",
-                  "mcp_server": "aialra-shopping-browser",
-                  "skill": "shopping-browser-research",
-                  "required_observation_schema": "schemas/observation.schema.json",
-                  "allowed_operation_classes": [
-                    "navigation-read",
-                    "snapshot-read",
-                    "detail-read",
-                    "comment-read",
-                    "screenshot-read"
-                  ],
-                  "prohibited_operation_classes": [
-                    "account-write",
-                    "credential-read",
-                    "content-write"
-                  ]
+                "providers": {
+                  "aialra-shopping-browser": {
+                    "kind": "mcp",
+                    "identifier": "aialra-shopping-browser",
+                    "availability": "installed-and-loaded",
+                    "allowed_operations": [
+                      "browser_navigate",
+                      "browser_snapshot",
+                      "browser_click",
+                      "browser_wait_for",
+                      "browser_take_screenshot"
+                    ],
+                    "prohibited_operation_classes": [
+                      "account-write",
+                      "credential-read",
+                      "content-write"
+                    ],
+                    "evidence_contract": {
+                      "node_output_schema": "current-node-output",
+                      "observation_schema": "aialra-shopping-browser/observation-v1"
+                    }
+                  },
+                  "opencli": {
+                    "kind": "cli",
+                    "identifier": "OpenCLI",
+                    "availability": "installed-connected-and-trusted",
+                    "allowed_operations": [
+                      "xiaohongshu.note",
+                      "xiaohongshu.comments"
+                    ],
+                    "prohibited_operation_classes": [
+                      "account-write",
+                      "credential-read",
+                      "content-write"
+                    ],
+                    "evidence_contract": {
+                      "node_output_schema": "current-node-output",
+                      "observation_schema": null
+                    }
+                  }
                 },
-                "opencli": {
-                  "mode": "fallback-only-before-first-site-access-when-installed-connected-and-trusted",
-                  "allowed_operations": [
-                    "xiaohongshu.note",
-                    "xiaohongshu.comments"
-                  ],
-                  "prohibited_operation_classes": [
-                    "account-write",
-                    "credential-read",
-                    "content-write"
+                "selection_policy": {
+                  "select_before_first_access": true,
+                  "reuse_selected_after_success": true,
+                  "switch_only_when_unavailable_before_access": true,
+                  "hard_stop_kinds": [
+                    "user-required",
+                    "policy-blocked",
+                    "fatal"
                   ]
                 }
               },
