@@ -1,0 +1,7 @@
+interface:
+  display_name: "小红书多轮研究"
+  short_description: "多轮搜索小红书笔记与评论并生成可追溯的主题研究证据与结论"
+  default_prompt: "使用 $xiaohongshu-research 围绕我的主题执行多轮搜索，核验代表性笔记和评论，区分共识、分歧与风险并给出直接证据链接"
+
+policy:
+  allow_implicit_invocation: true

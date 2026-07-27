@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "research_snapshot", "summary", "findings", "sources", "round_coverage", "inspection_coverage", "manual_search_urls", "warnings"],
+  "properties": {
+    "status": {"enum": ["complete", "partial", "no-result"]},
+    "research_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "topic", "region", "time_focus", "retrieved_at"],
+      "properties": {
+        "question": {"type": "string"},
+        "topic": {"type": "string"},
+        "region": {"type": "string"},
+        "time_focus": {"type": "string"},
+        "retrieved_at": {"type": "string"}
+      }
+    },
+    "summary": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "findings": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "statement", "confidence", "supporting_note_ids", "contradicting_note_ids", "caveats"],
+        "properties": {
+          "finding_id": {"type": "string", "pattern": "^finding-[1-9][0-9]*$"},
+          "statement": {"type": "string", "minLength": 3, "maxLength": 800},
+          "confidence": {"enum": ["high", "medium", "low"]},
+          "supporting_note_ids": {"type": "array", "minItems": 1, "maxItems": 20, "items": {"type": "string"}},
+          "contradicting_note_ids": {"type": "array", "maxItems": 20, "items": {"type": "string"}},
+          "caveats": {"type": "array", "maxItems": 12, "items": {"type": "string", "maxLength": 300}}
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["note_id", "title", "author", "url", "published_at", "evidence_level", "commercial_signals", "retrieved_at"],
+        "properties": {
+          "note_id": {"type": "string"},
+          "title": {"type": "string"},
+          "author": {"type": "string"},
+          "url": {"type": "string"},
+          "published_at": {"type": "string"},
+          "evidence_level": {"enum": ["A", "B", "C"]},
+          "commercial_signals": {"type": "array", "items": {"type": "string"}},
+          "retrieved_at": {"type": "string"}
+        }
+      }
+    },
+    "round_coverage": {"type": "object"},
+    "inspection_coverage": {"type": "object"},
+    "manual_search_urls": {"type": "array", "minItems": 3, "maxItems": 8, "items": {"type": "string"}},
+    "warnings": {"type": "array", "maxItems": 30, "items": {"type": "string"}}
+  }
+}

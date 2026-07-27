@@ -1,0 +1,73 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_text", "research_question", "topic", "scope", "evaluation_dimensions", "collection", "assumptions"],
+  "properties": {
+    "request_text": {"type": "string", "minLength": 3, "maxLength": 3000},
+    "research_question": {"type": "string", "minLength": 3, "maxLength": 500},
+    "topic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_topic", "topic_type", "required_concepts", "excluded_concepts"],
+      "properties": {
+        "canonical_topic": {"type": "string", "minLength": 2, "maxLength": 200},
+        "topic_type": {"enum": ["general", "travel", "shopping", "food", "lodging", "tutorial", "trend"]},
+        "required_concepts": {"type": "array", "minItems": 1, "maxItems": 12, "items": {"type": "string", "minLength": 1, "maxLength": 100}},
+        "excluded_concepts": {"type": "array", "maxItems": 20, "items": {"type": "string", "minLength": 1, "maxLength": 100}}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["region", "time_focus"],
+      "properties": {
+        "region": {"type": "string", "minLength": 1, "maxLength": 120},
+        "time_focus": {"type": "string", "minLength": 1, "maxLength": 120}
+      }
+    },
+    "evaluation_dimensions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 12,
+      "items": {"type": "string", "minLength": 1, "maxLength": 100}
+    },
+    "collection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["query_variants", "sort_modes", "minimum_rounds", "maximum_rounds", "candidate_limit", "detail_limit", "comments_per_note", "saturation", "pacing"],
+      "properties": {
+        "query_variants": {"type": "array", "minItems": 3, "maxItems": 8, "items": {"type": "string", "minLength": 2, "maxLength": 180}},
+        "sort_modes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {"enum": ["comprehensive", "latest", "most-liked", "most-saved", "most-comments"]}
+        },
+        "minimum_rounds": {"type": "integer", "minimum": 3, "maximum": 8},
+        "maximum_rounds": {"type": "integer", "minimum": 3, "maximum": 8},
+        "candidate_limit": {"type": "integer", "minimum": 20, "maximum": 160},
+        "detail_limit": {"type": "integer", "minimum": 3, "maximum": 20},
+        "comments_per_note": {"type": "integer", "minimum": 0, "maximum": 30},
+        "saturation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["min_new_unique_per_round", "consecutive_rounds"],
+          "properties": {
+            "min_new_unique_per_round": {"type": "integer", "minimum": 0, "maximum": 10},
+            "consecutive_rounds": {"const": 2}
+          }
+        },
+        "pacing": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["maximum_parallel_pages", "minimum_action_interval_seconds"],
+          "properties": {
+            "maximum_parallel_pages": {"type": "integer", "minimum": 1, "maximum": 2},
+            "minimum_action_interval_seconds": {"type": "number", "minimum": 1.5, "maximum": 10}
+          }
+        }
+      }
+    },
+    "assumptions": {"type": "array", "maxItems": 12, "items": {"type": "string", "minLength": 1, "maxLength": 200}}
+  }
+}
