@@ -9,11 +9,19 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from domain_lib import canonical_note_url, require_list, require_object, time_is_fresh
+from domain_lib import (
+    canonical_note_url,
+    contains_ephemeral_token,
+    require_list,
+    require_object,
+    time_is_fresh,
+)
 
 
 def validate(shortlist: dict[str, Any], inspection: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    if contains_ephemeral_token(inspection):
+        errors.append("inspection evidence must not persist xsec_token")
     if inspection.get("plan") != shortlist.get("plan"):
         errors.append("inspection must preserve the complete plan")
     if inspection.get("round_coverage") != shortlist.get("round_coverage"):

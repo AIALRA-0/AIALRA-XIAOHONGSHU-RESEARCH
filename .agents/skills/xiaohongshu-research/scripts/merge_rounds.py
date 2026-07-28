@@ -10,10 +10,19 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
-from domain_lib import canonical_note_url, normalized_text, parse_engagement, require_list, require_object
+from domain_lib import (
+    canonical_note_url,
+    contains_ephemeral_token,
+    normalized_text,
+    parse_engagement,
+    require_list,
+    require_object,
+)
 
 
 def build_shortlist(payload: dict[str, Any]) -> dict[str, Any]:
+    if contains_ephemeral_token(payload):
+        raise ValueError("round evidence must not persist xsec_token")
     plan = require_object(payload.get("plan"), "plan")
     topic = require_object(plan.get("topic"), "plan.topic")
     collection = require_object(plan.get("collection"), "plan.collection")

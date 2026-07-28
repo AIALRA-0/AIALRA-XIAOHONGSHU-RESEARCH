@@ -13,7 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 SKILL = ROOT / ".agents" / "skills" / "xiaohongshu-research"
 sys.path.insert(0, str(SKILL / "scripts"))
 
-from domain_lib import official_search_url  # noqa: E402
+from domain_lib import (  # noqa: E402
+    canonical_note_url,
+    contains_ephemeral_token,
+    note_id_from_url,
+    official_search_url,
+)
+from learn import ensure_learning_record_is_safe  # noqa: E402
 from merge_rounds import build_shortlist  # noqa: E402
 from validate_final import validate as validate_final  # noqa: E402
 from validate_inspection import validate as validate_inspection  # noqa: E402
@@ -101,7 +107,7 @@ def candidate(
         "saves_text": "50",
         "comments_text": "10",
         "cover_url": "https://img.invalid/cover.jpg",
-        "url": f"https://www.xiaohongshu.com/explore/{note_id}?xsec_token=not-stored",
+        "url": f"https://www.xiaohongshu.com/explore/{note_id}",
         "retrieved_at": now_iso(),
     }
 
@@ -176,6 +182,54 @@ def inspected_note(source: dict, claim_id: str, statement: str) -> dict:
 
 
 class XiaohongshuDomainTests(unittest.TestCase):
+    def test_ephemeral_detail_link_is_read_only_input_and_never_stored(self) -> None:
+        note_id = "67abcde0123456789abcde01"
+        transient = (
+            f"https://www.xiaohongshu.com/search_result/{note_id}"
+            "?xsec_token=temporary-value&xsec_source=pc_search"
+        )
+        self.assertEqual(note_id, note_id_from_url(transient))
+        self.assertEqual(
+            f"https://www.xiaohongshu.com/explore/{note_id}",
+            canonical_note_url(transient, note_id),
+        )
+        self.assertTrue(contains_ephemeral_token(transient))
+        payload = sample_round_results()
+        payload["candidates"][0]["url"] = transient
+        errors = validate_round_results(payload["plan"], payload)
+        self.assertTrue(any("xsec_token" in error for error in errors))
+        with self.assertRaisesRegex(ValueError, "xsec_token"):
+            build_shortlist(payload)
+
+    def test_ephemeral_token_is_rejected_from_nested_evidence(self) -> None:
+        shortlist = build_shortlist(sample_round_results())
+        note = inspected_note(
+            shortlist["shortlist"][0],
+            "reservation-required",
+            "热门展览需要提前预约",
+        )
+        inspection = {
+            "plan": shortlist["plan"],
+            "round_coverage": shortlist["round_coverage"],
+            "inspection_coverage": {
+                "notes_attempted": 1,
+                "notes_verified": 1,
+                "comments_read": 1,
+                "failed_urls": [],
+            },
+            "notes": [note],
+        }
+        inspection["notes"][0]["comments"][0]["text"] = (
+            "xsec_token=temporary-value"
+        )
+        errors = validate_inspection(shortlist, inspection)
+        self.assertTrue(any("xsec_token" in error for error in errors))
+        with self.assertRaisesRegex(ValueError, "xsec_token"):
+            ensure_learning_record_is_safe(
+                "记录 xsec_token=temporary-value",
+                "review:detail-check",
+            )
+
     def test_plan_requires_diverse_bounded_rounds(self) -> None:
         self.assertEqual([], validate_plan(sample_source(), sample_plan()))
         duplicate = sample_plan()

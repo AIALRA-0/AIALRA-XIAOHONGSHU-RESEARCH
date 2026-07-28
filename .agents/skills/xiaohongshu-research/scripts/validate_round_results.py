@@ -9,7 +9,14 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from domain_lib import canonical_note_url, note_id_from_url, require_list, require_object, time_is_fresh
+from domain_lib import (
+    canonical_note_url,
+    contains_ephemeral_token,
+    note_id_from_url,
+    require_list,
+    require_object,
+    time_is_fresh,
+)
 
 
 def new_unique_counts(rounds: list[dict[str, Any]], candidates: list[dict[str, Any]]) -> list[int]:
@@ -28,6 +35,8 @@ def new_unique_counts(rounds: list[dict[str, Any]], candidates: list[dict[str, A
 
 def validate(plan: dict[str, Any], payload: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    if contains_ephemeral_token(payload):
+        errors.append("round evidence must not persist xsec_token")
     if payload.get("plan") != plan:
         errors.append("round results must preserve the complete plan")
     collection = require_object(plan.get("collection"), "plan.collection")

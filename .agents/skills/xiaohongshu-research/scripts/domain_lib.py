@@ -13,6 +13,7 @@ from urllib.parse import quote_plus, urlsplit
 
 ALLOWED_HOST = "www.xiaohongshu.com"
 NOTE_ID_RE = re.compile(r"^[a-zA-Z0-9_-]{12,40}$")
+EPHEMERAL_TOKEN_RE = re.compile(r"\bxsec_token\b", re.IGNORECASE)
 
 
 def normalized_text(value: Any) -> str:
@@ -48,6 +49,19 @@ def canonical_note_url(raw: Any, note_id: Any = None) -> str | None:
         if parsed.scheme != "https" or (parsed.hostname or "").lower() != ALLOWED_HOST:
             return None
     return f"https://{ALLOWED_HOST}/explore/{identifier}"
+
+
+def contains_ephemeral_token(value: Any) -> bool:
+    if isinstance(value, str):
+        return EPHEMERAL_TOKEN_RE.search(value) is not None
+    if isinstance(value, dict):
+        return any(
+            contains_ephemeral_token(key) or contains_ephemeral_token(item)
+            for key, item in value.items()
+        )
+    if isinstance(value, (list, tuple, set)):
+        return any(contains_ephemeral_token(item) for item in value)
+    return False
 
 
 def official_search_url(query: str) -> str:

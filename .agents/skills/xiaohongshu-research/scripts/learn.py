@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 
 from compact import compact, read_jsonl
+from domain_lib import contains_ephemeral_token
 from runtime_lib import (
     NODE_ID_RE,
     RuntimeErrorDetail,
@@ -25,6 +26,11 @@ from runtime_lib import (
 
 
 EVIDENCE_RE = re.compile(r"^(?:validator|executor|review|user-confirmed):[A-Za-z0-9._-]{1,120}$")
+
+
+def ensure_learning_record_is_safe(lesson: str, evidence: str) -> None:
+    if contains_ephemeral_token(lesson) or contains_ephemeral_token(evidence):
+        raise RuntimeErrorDetail("Learning records must not contain xsec_token")
 
 
 def append_event(path: Path, event: dict) -> None:
@@ -63,6 +69,7 @@ def main() -> int:
             raise RuntimeErrorDetail(
                 "evidence must be a controlled identifier such as validator:final-check"
             )
+        ensure_learning_record_is_safe(args.lesson, args.evidence)
         root = find_repo_root()
         lock_errors = verify_core_lock(root, find_skill_dir(root))
         if lock_errors:

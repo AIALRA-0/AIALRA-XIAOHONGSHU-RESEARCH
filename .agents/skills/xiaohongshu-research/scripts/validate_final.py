@@ -9,11 +9,13 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from domain_lib import canonical_note_url, require_list, require_object
+from domain_lib import canonical_note_url, contains_ephemeral_token, require_list, require_object
 
 
 def validate(source: dict[str, Any], result: dict[str, Any]) -> list[str]:
     errors: list[str] = []
+    if contains_ephemeral_token(result):
+        errors.append("final evidence must not persist xsec_token")
     sources = require_list(result.get("sources"), "sources")
     source_ids = [item.get("note_id") for item in sources]
     if len(source_ids) != len(set(source_ids)):
