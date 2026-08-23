@@ -18,7 +18,7 @@
     ".agents/skills/xiaohongshu-research/scripts/merge_rounds.py": "e978ba46d6a6abb02bc64899d80cfbb0dbbb0205fbc48288dcbd75c63f323fbe",
     ".agents/skills/xiaohongshu-research/scripts/promote.py": "a68003a16738141752db61106c8fafee31b001ae9e9ad8466ebe4747d1faa103",
     ".agents/skills/xiaohongshu-research/scripts/runner.py": "afd479afcf6d852201109b2906fa4f0039925f06dcba52cb43b3de954ce7483e",
-    ".agents/skills/xiaohongshu-research/scripts/runtime_lib.py": "0dafaa787698c80ff7fb88dac5a88e0be8da086d67ffc7a15276b6f51152cb7d",
+    ".agents/skills/xiaohongshu-research/scripts/runtime_lib.py": "e8d93cd7dd1148a1ec4579fccfce95ddf15344dad5fc7d3e24f86296dac0b5cd",
     ".agents/skills/xiaohongshu-research/scripts/validate_final.py": "fe8b797de401ec423c8406b43c4c5f10fd4654a748f89c6b99c642c41d8eb950",
     ".agents/skills/xiaohongshu-research/scripts/validate_inspection.py": "2a2734f659137d62872aaf03b2f04125b091407198a2d01fb79f693edb574551",
     ".agents/skills/xiaohongshu-research/scripts/validate_plan.py": "5715d093bc6e6926241c90789a4993e430095efc4f3e6dfb1ee9372f848305af",
@@ -30,12 +30,12 @@
     ".pre-commit-config.yaml": "721f006af8f50751b68c7ac00cad81d44cf57cb7296403916eeb17a760f25643",
     "AGENTS.md": "d7072267741d3d72f6edd65349543d4f6c3981402f1adc6bc108491b8e96fc36",
     "SECURITY.md": "b05309f789fa52354ab9bbe37cbcef639df8044e4a917c2efbc61b3dedb6256d",
-    "VERSION": "97a5d6e540a6120d09c39ddb667e0e8e2bac7fcc2ffef813b82e08fd60365bce",
+    "VERSION": "87b241b275c591694846560e9879f50c9da3150f854efdabd782c539772f3033",
     "scripts/check_secrets.py": "ac9d3ffc77761524984947c074495fd74120e4f9ecb657d4b37af145703808cc",
     "scripts/install_local.py": "e5ab3d37dcb6e1a4eef8bd28b848326fe4477735e3bb5c56c8e7f8775a946814",
     "scripts/validate.py": "bd6ff45c47651e415f25cd26db712f4da73606f4723e2ff8f8f58077d5f29f5e"
   },
   "format_version": 1,
   "skill_name": "xiaohongshu-research",
-  "skill_version": "0.6.0"
+  "skill_version": "0.6.1"
 }
